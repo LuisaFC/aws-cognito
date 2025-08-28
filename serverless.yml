@@ -24,6 +24,41 @@ custom:
     platform: node
     concurrency: 10
 
+resources:
+  Resources:
+    LiveUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: live020-UserPool
+        MfaConfiguration: OFF
+        AutoVerifiedAttributes:
+          - email
+        AdminCreateUserConfig:
+          AllowAdminCreateUserOnly: false
+        UsernameAttributes:
+          - email
+        AccountRecoverySetting:
+          RecoveryMechanisms:
+            - Name: verified_email
+              Priority: 1
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 10
+            RequireUppercase: false
+            RequireLowercase: false
+            RequireNumbers: false
+            RequireSymbols: false
+            TemporaryPasswordValidityDays: 2
+        Schema:
+          - Name: given_name
+            Required: true
+            Mutable: true
+            AttributeDataType: String
+          - Name: family_name
+            Required: false
+            Mutable: true
+            AttributeDataType: String
+
 functions:
   hello:
     handler: src/functions/hello.handler
