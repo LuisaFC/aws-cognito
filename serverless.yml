@@ -58,6 +58,19 @@ resources:
             Required: false
             Mutable: true
             AttributeDataType: String
+    LiveUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: live020-UserPool-Client
+        UserPoolId: !Ref LiveUserPool
+        ExplicitAuthFlows:
+          - ALLOW_USER_PASSWORD_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+        TokenValidityUnits:
+          AccessToken: hours
+          RefreshToken: days
+        AccessTokenValidity: 3
+        RefreshTokenValidity: 48
 
 functions:
   hello:
