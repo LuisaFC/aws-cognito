@@ -1,8 +1,5 @@
+org: luisawork
 service: live020
-frameworkVersion: '3'
-
-plugins:
-  - serverless-esbuild
 
 package:
   individually: true
@@ -16,16 +13,16 @@ provider:
 
 custom:
   esbuild:
-  bundle: true
-  minify: true
-  sourcemap: false
-  target: node20
-  exclude:
-    - '@aws-sdk/*'
-  define:
-    require.resolve: undefined
-  platform: node
-  concurrency: 10
+    bundle: true
+    minify: true
+    sourcemap: false
+    target: node20
+    exclude:
+      - '@aws-sdk/*'
+    define:
+      require.resolve: undefined
+    platform: node
+    concurrency: 10
 
 functions:
   hello:
