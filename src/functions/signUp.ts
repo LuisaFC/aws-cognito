@@ -1,7 +1,7 @@
 import { bodyParser } from '@/utils/bodyParses';
 import { response } from '@/utils/response';
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { SignUpCommand } from '@aws-sdk/client-cognito-identity-provider';
+import { SignUpCommand, UsernameExistsException } from '@aws-sdk/client-cognito-identity-provider';
 import { cognitoClient } from '@/libs/cognitoClient';
 
 export async function handler(event: APIGatewayProxyEventV2) {
@@ -29,5 +29,15 @@ export async function handler(event: APIGatewayProxyEventV2) {
     return response(200, {
       userId: UserSub,
     });
-  } catch { /* empty */ }
+  } catch(error){
+    if(error instanceof UsernameExistsException){
+      return response(409, {
+        error: 'User already exists'
+      });
+    }
+
+    return response(500, {
+      error: 'Internal Server Error'
+    });
+  }
 }
