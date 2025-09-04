@@ -12,6 +12,14 @@ provider:
   architecture: arm64
   environment:
     COGNITO_CLIENT_ID: !Ref LiveUserPoolClient
+  httpApi:
+    authorizers:
+      CognitoAuthorizer:
+        type: jwt
+        identitySource: $request.header.Authorization
+        issuerUrl: !GetAtt LiveUserPool.ProviderURL
+        audience:
+          - !Ref LiveUserPoolClient
 
 custom:
   esbuild:
@@ -99,3 +107,10 @@ functions:
       - httpApi:
           method: POST
           path: /auth/refresh-token
+  profile:
+    handler: src/functions/profile.handler
+    events:
+      - httpApi:
+          method: GET
+          path: /profile
+          authorizer: CognitoAuthorizer
